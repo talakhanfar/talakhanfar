@@ -120,4 +120,3 @@ $.getJSON("RamallahZones.json", function(RZ) {
 </body>
 
 </html>
-unpkg.com
