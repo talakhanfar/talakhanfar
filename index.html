@@ -11,9 +11,6 @@
   <!-- Add a link to the Leaflet CSS library so you can reference it for styling your map -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
 
-  <!-- Leaflet North Arrow Control CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-northarrow@1.0.0/dist/leaflet-control-northarrow.min.css" />
-
   <!-- All the CSS code goes inside the style tags below -->
   <style>
     /* style the body */
@@ -30,6 +27,21 @@
       top: 0px;
       bottom: 0;
     }
+
+    /* style the date and time display */
+    #date-time {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      z-index: 1000;
+    }
   </style>
 </head>
 
@@ -37,11 +49,11 @@
   <!-- the map -->
   <div id="map"></div>
 
+  <!-- Date and Time display -->
+  <div id="date-time"></div>
+
   <!-- Add a link to the Leaflet JavaScript library so you can reference it for building your map -->
   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
-
-  <!-- Leaflet North Arrow Control JavaScript -->
-  <script src="https://unpkg.com/leaflet-control-northarrow@1.0.0/dist/leaflet-control-northarrow.min.js"></script>
 
   <!-- Add a link to the jQuery JavaScript library so you can leverage ajax methods to load your data -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -65,13 +77,9 @@
   	maxZoom: 20
 	}).addTo(map);
 
-    // add north arrow control to the map
-    L.control.northArrow().addTo(map);
-
-    // use jquery to load GeoJSON data
-
+    // use jQuery to load GeoJSON data
     $.getJSON("RamallahZones.json", function(RZ) {
-      const zonesLayer = L.geoJson(RZ, {
+      L.geoJson(RZ, {
         style: function(feature) {
           return {
             fillColor: "yellow",
@@ -90,7 +98,7 @@
     });
 
     $.getJSON("wasteContainer.json", function(WC) {
-      const wasteContainersLayer = L.geoJson(WC, {
+      L.geoJson(WC, {
         pointToLayer: function(feature, latlng) {
           return L.circleMarker(latlng, {
             radius: 5,
@@ -109,15 +117,17 @@
       }).addTo(map);
     });
 	 
-      // Add layers to map with control options
-    const baseLayers = {};
-    const overlays = {
-      "Zones": zonesLayer,
-      "Waste Containers": wasteContainersLayer
-    };
+    // Function to update date and time every second
+    function updateDateTime() {
+      const now = new Date();
+      const dateString = now.toLocaleDateString();
+      const timeString = now.toLocaleTimeString();
+      document.getElementById("date-time").innerHTML = dateString + " " + timeString;
+    }
 
-    // Add layer control to the map
-    L.control.layers(baseLayers, overlays).addTo(map);
+    // Initial call and interval to update time every second
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
   </script>
 </body>
 
