@@ -30,12 +30,6 @@
       top: 0px;
       bottom: 0;
     }
-
-    /* style for north arrow size */
-    .leaflet-control-northarrow {
-      width: 50px; /* adjust size as needed */
-      height: 50px; /* adjust size as needed */
-    }
   </style>
 </head>
 
@@ -71,8 +65,8 @@
   	maxZoom: 20
 	}).addTo(map);
 
-    // add north arrow control to the map and set position to top right
-    L.control.northArrow({ position: 'topright' }).addTo(map);
+    // add north arrow control to the map
+    L.control.northArrow().addTo(map);
 
     // use jquery to load GeoJSON data
 
@@ -128,8 +122,15 @@
 </body>
 
 </html>
-    
+
+  
+
 
    
+  
+           
+
+   
+ 
    
            
